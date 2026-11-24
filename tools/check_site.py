@@ -25,6 +25,8 @@ def main():
         assert p.lang=='es' and p.h1==1 and p.viewport,name
         assert config['email'] in text and '{{' not in text,name
         assert '�' not in text and 'Ã³' not in text,'Encoding corruption'
+        assert '\ufffd' not in text and not re.search(r'[A-Za-z]\?[A-Za-z]', re.sub(r'<[^>]*>', '', text)), 'Damaged Spanish text'
+        assert '<meta charset="utf-8">' in text, 'UTF-8 declaration required'
         assert 'mailto:'+config['email'] in text,name
         assert all('alt' in im and im.get('width') and im.get('height') for im in p.images),'Image accessibility/dimensions'
         assert not re.search(r'<(?:iframe|form)\b',text,re.I),'Unexpected external integration'
@@ -48,7 +50,7 @@ def main():
             text=p.read_text(encoding='utf-8')
             assert not any(s in text for s in ['googletagmanager.com','google-analytics.com','firebaseConfig','localStorage','document.cookie']),'Unexpected tracker/config'
     policy=(ROOT/'privacidad.html').read_text(encoding='utf-8')
-    assert all(s in policy for s in ['Unish Coto','SQLite','d?a y mes','CloudSync','Google Sign-In','GitHub Pages','Conservaci?n','Eliminaci?n'.lower()])
+    assert all(s in policy for s in ['Unish Coto','SQLite','día y mes','CloudSync','Google Sign-In','GitHub Pages','Conservación','Eliminación'.lower()])
     assert not any(s in policy for s in ['PENDIENTE','BORRADOR'])
     assert '@media(max-width:650px)' in (ROOT/'assets/css/styles.css').read_text()
     assert 'prefers-reduced-motion' in (ROOT/'assets/css/styles.css').read_text()
