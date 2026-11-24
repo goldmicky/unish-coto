@@ -49,6 +49,8 @@ def main():
         if p.suffix in ['.html','.js','.css']:
             text=p.read_text(encoding='utf-8')
             assert not any(s in text for s in ['googletagmanager.com','google-analytics.com','firebaseConfig','localStorage','document.cookie']),'Unexpected tracker/config'
+    support=(ROOT/'soporte.html').read_text(encoding='utf-8')
+    assert all(q.startswith(chr(191)) and q.endswith('?') for q in re.findall(r'<summary>(.*?)</summary>', support)), 'Spanish question punctuation'
     policy=(ROOT/'privacidad.html').read_text(encoding='utf-8')
     assert all(s in policy for s in ['Unish Coto','SQLite','día y mes','CloudSync','Google Sign-In','GitHub Pages','Conservación','Eliminación'.lower()])
     assert not any(s in policy for s in ['PENDIENTE','BORRADOR'])
