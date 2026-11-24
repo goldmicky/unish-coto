@@ -25,7 +25,7 @@ def main():
         assert p.lang=='es' and p.h1==1 and p.viewport,name
         assert config['email'] in text and '{{' not in text,name
         assert '�' not in text and 'Ã³' not in text,'Encoding corruption'
-        assert '\ufffd' not in text and not re.search(r'[A-Za-z]\?[A-Za-z]', re.sub(r'<[^>]*>', '', text)), 'Damaged Spanish text'
+        assert '\ufffd' not in text and not re.search(r'[A-Za-z]\?[A-Za-z]', re.sub(r'<[^>]*>', ' ', text)), 'Damaged Spanish text'
         assert '<meta charset="utf-8">' in text, 'UTF-8 declaration required'
         assert 'mailto:'+config['email'] in text,name
         assert all('alt' in im and im.get('width') and im.get('height') for im in p.images),'Image accessibility/dimensions'
